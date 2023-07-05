@@ -1,0 +1,13 @@
+GPT-4 prompt:
+lets start a python3 project that uses chat-gpt-4 to rank google gmail emails based on semantically similarity to keywords.
+
+
+That's an interesting project idea. Let's break it down into parts.
+
+1.Login to Gmail API: You would need to authenticate your Python script to use the Gmail API, and fetch the emails.
+
+2.Preprocessing of Gmail data: Once you have the emails, you'll want to preprocess the text data so that it can be fed into the GPT-4 model.
+
+3.Use GPT-4 to process the data: You'll need to call the GPT-4 API (or if it's available in a Python package, use that) to process the emails and rank them according to their semantic similarity to the keywords.
+
+4.Rank the emails: Finally, you'll want to rank the emails based on the results from GPT-4 and present these results in a meaningful way.
