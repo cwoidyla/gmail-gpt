@@ -2,6 +2,7 @@ import os
 import google.auth
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
+from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 import openai
 
@@ -9,7 +10,7 @@ import openai
 def gmail_login():
     creds = None
     if os.path.exists('token.json'):
-        creds = google.auth.credentials.Credentials.from_authorized_user_file('token.json')
+        creds = Credentials.from_authorized_user_file('token.json')
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
