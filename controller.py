@@ -11,6 +11,7 @@ from email import policy
 from email.parser import BytesParser
 from datetime import datetime, timedelta
 import time
+from bs4 import BeautifulSoup
 
 # 1. Login to Gmail API
 def gmail_login():
@@ -44,12 +45,30 @@ def fetch_and_preprocess(gmail):
             msg_str = urlsafe_b64decode(msg['raw']).decode()
             mime_msg = BytesParser(policy=policy.default).parsebytes(msg_str.encode())
 
+            # Looking for 'text/plain' or 'text/html' part in the email.
+            if mime_msg.is_multipart():
+                for part in mime_msg.walk():
+                    if part.get_content_type() in ['text/plain', 'text/html']:
+                        body = part.get_content()
+                        soup = BeautifulSoup(body, 'html.parser')
+                        body = soup.get_text().strip()
+                        break
+            else:
+                body = mime_msg.get_content()
+                soup = BeautifulSoup(body, 'html.parser')
+                body = soup.get_text().strip()
+            
+            # If the content type is 'text/html', convert to 'text/plain'
+            if part.get_content_type() == 'text/html':
+                soup = BeautifulSoup(body, 'html.parser')
+                body = soup.get_text().strip()
+
             data = {
                 'subject': mime_msg['subject'],
                 'from': mime_msg['from'],
                 'to': mime_msg['to'],
                 'date': mime_msg['date'],
-                'body': mime_msg.get_body().get_content()
+                'body': body
             }
 
             gmail_data.append(data)
